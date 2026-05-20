@@ -1,0 +1,799 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Oblivious fate of Shintouwa & Durie - CH. 01</title>
+  
+  <!-- Font pairings: Playfair Display for editorial/title, Space Grotesk and Montserrat for texts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Space+Grotesk:wght@300;400;500;600;700&family=Montserrat:wght@200;300;400;500;600&display=swap" rel="stylesheet">
+  
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            mono: ['Space Grotesk', 'sans-serif'],
+            serif: ['Playfair Display', 'serif'],
+            sans: ['Montserrat', 'sans-serif'],
+          },
+          colors: {
+            raspberry: '#E30B5C',
+            'raspberry-dark': '#8A0532',
+            'raspberry-light': '#FF4D80',
+          }
+        }
+      }
+    }
+  </script>
+  
+  <style>
+    /* Smooth transitions for active cards scrolling */
+    .manga-page-card {
+      transition: opacity 1.2s cubic-bezier(0.16, 1, 0.3, 1), transform 1.2s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    
+    /* Elegant grainy paper texture overlay */
+    .grain-overlay {
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.02'/%3E%3C/svg%3E");
+    }
+    
+    /* Glow dots styling */
+    .screentone-dots-soft {
+      background-image: radial-gradient(rgba(227, 11, 92, 0.15) 12%, transparent 12%);
+      background-size: 8px 8px;
+    }
+    
+    .scroll-container::-webkit-scrollbar {
+      width: 6px;
+    }
+    .scroll-container::-webkit-scrollbar-track {
+      background: rgba(0,0,0,0.2);
+    }
+    .scroll-container::-webkit-scrollbar-thumb {
+      background: rgba(227, 11, 92, 0.2);
+      border-radius: 3px;
+    }
+    .scroll-container::-webkit-scrollbar-thumb:hover {
+      background: rgba(227, 11, 92, 0.4);
+    }
+    
+    /* Centering and responsive styling for the new manga panels */
+    .manga-panel-img {
+      max-width: 100%;
+      height: auto;
+      object-fit: contain;
+      display: block;
+      margin: 0 auto;
+    }
+
+    /* Transition for fading the entire body to pure black */
+    body {
+      transition: opacity 1.5s ease-in-out, background-color 1.5s ease-in-out !important;
+    }
+    body.faded-to-black {
+      opacity: 0 !important;
+      background-color: #000000 !important;
+    }
+
+    /* Epilogue text hover glow and pointer cursor */
+    #epilogue-trigger-text {
+      cursor: pointer;
+      transition: text-shadow 0.5s ease-in-out, color 0.5s ease-in-out;
+    }
+    #epilogue-trigger-text:hover {
+      color: #ffffff;
+      text-shadow: 0 0 10px #E30B5C, 0 0 20px rgba(227, 11, 92, 0.7);
+    }
+  </style>
+</head>
+<body class="relative min-h-screen text-stone-100 font-sans flex flex-col justify-between overflow-x-hidden selection:bg-raspberry selection:text-white bg-[#080808] scroll-container">
+
+  <!-- Persistent Ambient Backgrounds (Two-Layer Crossfade for Liquid Smooth Gradients) -->
+  <div id="bg-layer-1" class="fixed inset-0 transition-opacity duration-[1400ms] ease-in-out z-0 pointer-events-none opacity-100" style="background-image: radial-gradient(circle at center, rgba(28,28,30,0.6) 0%, rgba(5,5,5,1) 100%);"></div>
+  <div id="bg-layer-2" class="fixed inset-0 transition-opacity duration-[1400ms] ease-in-out z-0 pointer-events-none opacity-0"></div>
+  
+  <!-- Grainy Overlay for Indie-Book feel -->
+  <div class="fixed inset-0 grain-overlay pointer-events-none z-10 opacity-25"></div>
+
+  <!-- Ambient Particles Background Canvas (Generates romantic drifting stardust / petals) -->
+  <canvas id="ambient-particles" class="fixed inset-0 pointer-events-none z-5 opacity-40"></canvas>
+
+  <!-- Fixed Status Elements -->
+  <div class="fixed top-6 right-6 md:right-12 z-50 bg-[#0A0A0C]/85 backdrop-blur-md border border-stone-900/80 px-4 py-2 rounded-full text-[10px] tracking-[0.25em] font-mono text-stone-400 select-none shadow-xl flex items-center gap-2">
+    <span>INDEX</span>
+    <span class="w-1.5 h-1.5 rounded-full bg-raspberry animate-pulse"></span>
+    <span id="progress-text" class="text-raspberry font-semibold">1 / 10</span>
+  </div>
+
+  <!-- Header Section -->
+  <header class="max-w-2xl w-full mx-auto mt-8 px-4 md:px-0 mb-10 flex items-center justify-between border-b border-stone-800/50 pb-5 z-20 relative">
+    <div class="flex items-center gap-3">
+      <!-- Span element targeted by Selector 2 -->
+      <span class="bg-raspberry/20 text-raspberry hover:bg-raspberry/30 font-mono text-[10px] md:text-xs font-semibold px-2.5 py-1 uppercase tracking-widest rounded border border-raspberry/20 shadow-sm transition-all">CH. 01</span>
+      <!-- H1 element targeted by Selector 1 -->
+      <h1 class="text-xs md:text-sm font-serif font-semibold tracking-wide text-stone-200">Oblivious fate of ShintouwaxDurie</h1>
+    </div>
+    
+    <a href="/" class="group flex items-center gap-2 text-[10px] md:text-xs text-stone-400 hover:text-raspberry transition-all font-mono uppercase tracking-[0.15em]">
+      <svg class="w-3.5 h-3.5 transform group-hover:-translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
+      </svg>
+      Return
+    </a>
+  </header>
+
+  <!-- Main Manga Stack Container -->
+  <main class="max-w-2xl w-full mx-auto flex-1 flex flex-col gap-10 px-4 md:px-0 z-20 relative pb-16" id="manga-storyboard">
+    
+    <!-- PAGE 1: CHAPTER COVER / PROLOGUE -->
+    <div class="manga-page-card opacity-0 translate-y-8 border border-stone-900/60 bg-stone-950/40 backdrop-blur-md rounded-xl overflow-hidden shadow-2xl relative" data-page="1">
+      <div class="relative w-full aspect-[2/3] md:aspect-[5/7] flex items-center justify-center bg-stone-950">
+        
+        <!-- Spinner Loader -->
+        <div class="absolute inset-0 flex items-center justify-center bg-[#090909] z-20 transition-opacity duration-500 loader-overlay">
+          <div class="relative w-10 h-10">
+            <div class="absolute inset-0 rounded-full border-2 border-stone-900"></div>
+            <div class="absolute inset-0 rounded-full border-t-2 border-raspberry animate-spin"></div>
+          </div>
+        </div>
+        
+        <!-- Real Image Element with Cascading Source Chains -->
+        <img 
+          id="manga-page-img-1" 
+          class="absolute inset-0 w-full h-full object-contain opacity-0 transition-opacity duration-750 select-none z-10" 
+          alt="Page 1 - Oblivious fate of Shintouwa & Durie cover"
+          onload="handleImageLoaded(this)"
+        />
+        
+        <!-- High Fidelity Gothic Storyboard Fallback Card -->
+        <div class="fallback-card absolute inset-0 flex flex-col justify-between p-6 md:p-10 text-center bg-[#0C0C0E] border border-stone-900 overflow-y-auto hidden scroll-container select-text">
+          <div class="screentone-dots-soft absolute inset-0 pointer-events-none opacity-20"></div>
+          
+          <div class="flex flex-col items-center mt-4 relative z-10">
+            <p class="text-[10px] uppercase font-mono tracking-[0.4em] text-raspberry font-medium mb-2">PROLOGUE</p>
+            <div class="w-10 h-[1px] bg-raspberry/30 mb-8"></div>
+            
+            <h2 class="font-serif text-3xl md:text-5xl font-italic italic text-stone-100 tracking-wide leading-tight mb-3 font-semibold text-transparent bg-clip-text bg-gradient-to-b from-stone-150 to-stone-400">
+              Oblivious fate of Shintouwa & Durie
+            </h2>
+            <p class="font-serif text-stone-400 text-sm md:text-base italic max-w-md mt-4 leading-relaxed font-light">
+              "A year ago, two paths crossed in the quietest of moments."
+            </p>
+          </div>
+          
+          <div class="my-6 max-w-lg mx-auto text-left space-y-4 font-sans text-xs md:text-sm text-stone-300 pointer-events-auto leading-relaxed relative z-10 px-4">
+            <p class="text-center font-light leading-relaxed">
+              Shintouwa and Durie. Two strangers, completely oblivious to the invisible thread of fate tying their futures together.
+            </p>
+            <p class="text-center font-light leading-relaxed">
+              But destiny is rarely a straight line. Like smoke in the wind, they vanished from each other's lives as quickly as they had entered.
+            </p>
+            <p class="text-center font-light text-[#FF4D80]">
+              A full year of absolute silence. No warnings. No goodbyes. Just an endless, unexplained void.
+            </p>
+            <p class="text-center font-light leading-relaxed">
+              They thought the story ended before it even began.
+            </p>
+            <p class="text-center font-serif italic text-stone-100 text-base mt-2">
+              Until today.
+            </p>
+          </div>
+          
+          <div class="mb-4 relative z-10">
+            <div class="bg-stone-900/60 border border-stone-800/80 rounded-lg py-2.5 px-4 max-w-xs mx-auto text-[10px] text-stone-400 tracking-wider">
+              On a desperately ordinary afternoon,<br>
+              the universe finally aligned...
+            </div>
+          </div>
+        </div>
+        
+      </div>
+    </div>
+
+    <!-- PAGE 2: THE ENCOUNTER / THREAD SILENCE -->
+    <div class="manga-page-card opacity-0 translate-y-8 border border-stone-900/60 bg-stone-950/40 backdrop-blur-md rounded-xl overflow-hidden shadow-2xl relative" data-page="2">
+      <div class="relative w-full aspect-[2/3] md:aspect-[5/7] flex items-center justify-center bg-stone-950">
+        <img 
+          id="manga-page-img-2" 
+          src="Panel 2 (R).png" 
+          alt="Page 2 - The silent void"
+          class="manga-panel-img select-none z-10" 
+          referrerpolicy="no-referrer"
+        />
+      </div>
+    </div>
+
+    <!-- PAGE 3: THE REUNION / WORLD STOPPED -->
+    <div class="manga-page-card opacity-0 translate-y-8 border border-stone-900/60 bg-stone-950/40 backdrop-blur-md rounded-xl overflow-hidden shadow-2xl relative" data-page="3">
+      <div class="relative w-full aspect-[2/3] md:aspect-[5/7] flex items-center justify-center bg-stone-950">
+        <img 
+          id="manga-page-img-3" 
+          src="Panel 3 (R).png" 
+          alt="Page 3 - The reunion, world stopped spinning"
+          class="manga-panel-img select-none z-10" 
+          referrerpolicy="no-referrer"
+        />
+      </div>
+    </div>
+
+    <!-- PAGE 4: THE CM LEADERBOARD / EA FUT CARD STORY -->
+    <div class="manga-page-card opacity-0 translate-y-8 border border-stone-900/60 bg-stone-950/40 backdrop-blur-md rounded-xl overflow-hidden shadow-2xl relative" data-page="4">
+      <div class="relative w-full aspect-[2/3] md:aspect-[5/7] flex items-center justify-center bg-stone-950">
+        <img 
+          id="manga-page-img-4" 
+          src="Panel 4 (R).png" 
+          alt="Page 4 - FIFA Card leaderboard story"
+          class="manga-panel-img select-none z-10" 
+          referrerpolicy="no-referrer"
+        />
+      </div>
+    </div>
+
+    <!-- PAGE 5: MATCH PANELS / DISCORD CONNECT -->
+    <div class="manga-page-card opacity-0 translate-y-8 border border-stone-900/60 bg-stone-950/40 backdrop-blur-md rounded-xl overflow-hidden shadow-2xl relative" data-page="5">
+      <div class="relative w-full aspect-[2/3] md:aspect-[5/7] flex items-center justify-center bg-stone-950">
+        <img 
+          id="manga-page-img-5" 
+          src="Panel 5 (R).png" 
+          alt="Page 5 - Discord match profile pictures"
+          class="manga-panel-img select-none z-10" 
+          referrerpolicy="no-referrer"
+        />
+      </div>
+    </div>
+
+    <!-- PAGE 6: HARMONY BROKE / THE BREAKING POINT -->
+    <div class="manga-page-card opacity-0 translate-y-8 border border-stone-900/60 bg-stone-950/40 backdrop-blur-md rounded-xl overflow-hidden shadow-2xl relative" data-page="6">
+      <div class="relative w-full aspect-[2/3] md:aspect-[5/7] flex items-center justify-center bg-stone-950">
+        <img 
+          id="manga-page-img-6" 
+          src="Panel 6 (R).png" 
+          alt="Page 6 - But then the harmony broke"
+          class="manga-panel-img select-none z-10" 
+          referrerpolicy="no-referrer"
+        />
+      </div>
+    </div>
+
+    <!-- PAGE 7: THE RECOVERY / IN THE QUIET -->
+    <div class="manga-page-card opacity-0 translate-y-8 border border-stone-900/60 bg-stone-950/40 backdrop-blur-md rounded-xl overflow-hidden shadow-2xl relative" data-page="7">
+      <div class="relative w-full aspect-[2/3] md:aspect-[5/7] flex items-center justify-center bg-stone-950">
+        <img 
+          id="manga-page-img-7" 
+          src="Panel 7 (R2).png" 
+          alt="Page 7 - Quiet sunset reunion looking at sunset"
+          class="manga-panel-img select-none z-10" 
+          referrerpolicy="no-referrer"
+        />
+      </div>
+    </div>
+
+    <!-- PAGE 8: SACRIFICE & TEARS / HURTING NO MORE -->
+    <div class="manga-page-card opacity-0 translate-y-8 border border-stone-900/60 bg-stone-950/40 backdrop-blur-md rounded-xl overflow-hidden shadow-2xl relative" data-page="8">
+      <div class="relative w-full aspect-[2/3] md:aspect-[5/7] flex items-center justify-center bg-stone-950">
+        <img 
+          id="manga-page-img-8" 
+          src="Panel 8 (R).png" 
+          alt="Page 8 - Melancholic crying sunset farewell dialogue"
+          class="manga-panel-img select-none z-10" 
+          referrerpolicy="no-referrer"
+        />
+      </div>
+    </div>
+
+    <!-- PAGE 9: RESOLVE & BARRIERS / DETERMINED LOVE -->
+    <div class="manga-page-card opacity-0 translate-y-8 border border-stone-900/60 bg-stone-950/40 backdrop-blur-md rounded-xl overflow-hidden shadow-2xl relative" data-page="9">
+      <div class="relative w-full aspect-[2/3] md:aspect-[5/7] flex items-center justify-center bg-stone-950">
+        <img 
+          id="manga-page-img-9" 
+          src="Panel 9 (R).png" 
+          alt="Page 9 - resolve sunset sits rooftop"
+          class="manga-panel-img select-none z-10" 
+          referrerpolicy="no-referrer"
+        />
+      </div>
+    </div>
+
+    <!-- PAGE 10: ENDLESS BLUE / CLOSING SUNSET FACE CLOSEUP -->
+    <div class="manga-page-card opacity-0 translate-y-8 border border-stone-900/60 bg-stone-950/40 backdrop-blur-md rounded-xl overflow-hidden shadow-2xl relative" data-page="10">
+      <div class="relative w-full aspect-[2/3] md:aspect-[5/7] flex items-center justify-center bg-stone-950">
+        <img 
+          id="manga-page-img-10" 
+          src="Panel 10 (R).png" 
+          alt="Page 10 - Romantic emotional close up face query epic ending"
+          class="manga-panel-img select-none z-10" 
+          referrerpolicy="no-referrer"
+        />
+      </div>
+    </div>
+
+    <!-- EPILOGUE: WHY SHE SAYS -->
+    <div class="manga-page-card opacity-0 translate-y-8 py-24 flex flex-col items-center justify-center relative w-full mb-12" data-page="12" id="manga-epilogue">
+      <div class="text-center relative z-20">
+        <span id="epilogue-trigger-text" class="text-2xl md:text-3xl font-serif italic text-stone-300 select-none">
+          "Why she says..."
+        </span>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- Injection, Transition, and Ambient Canvas Logics -->
+  <script>
+    // List of page background gradients to sync with the current active panels
+    const bgGradients = {
+      1: 'radial-gradient(circle at center, rgba(28,28,30,0.85) 0%, rgba(5,5,5,1) 100%)',   // Chapter Cover (Charcoal)
+      2: 'radial-gradient(circle at center, rgba(35,18,22,0.85) 0%, rgba(5,5,5,1) 100%)',   // Cherry Blossom street (Warm Pink/Rose)
+      3: 'radial-gradient(circle at center, rgba(45,20,33,0.85) 0%, rgba(5,5,5,1) 100%)',   // Close up reunion meet (Romantic Purple/Pink)
+      4: 'radial-gradient(circle at center, rgba(27,15,46,0.85) 0%, rgba(5,5,5,1) 100%)',   // CM Leaderboard FUT Card (Violet/Imperial Gold)
+      5: 'radial-gradient(circle at center, rgba(42,17,26,0.85) 0%, rgba(5,5,5,1) 100%)',   // Discord matchmaking chat (Hearts Pink)
+      6: 'radial-gradient(circle at center, rgba(24,25,27,0.85) 0%, rgba(5,5,5,1) 100%)',   // Harmony Broke cracked glass (Cold Gunmetal)
+      7: 'radial-gradient(circle at center, rgba(53,21,12,0.85) 0%, rgba(5,5,5,1) 100%)',   // Sunset roofs reunion quiet (Molten Copper)
+      8: 'radial-gradient(circle at center, rgba(46,11,15,0.85) 0%, rgba(5,5,5,1) 100%)',   // Tears separation sad crimson (Blood Crimson)
+      9: 'radial-gradient(circle at center, rgba(48,23,10,0.85) 0%, rgba(5,5,5,1) 100%)',   // Roof sits barriers down (Dusk Amber)
+      10: 'radial-gradient(circle at center, rgba(50,27,7,0.85) 0%, rgba(5,5,5,1) 100%)',   // sad love closeup finale (Golden Sunset)
+      11: 'radial-gradient(circle at center, rgba(22,22,25,0.85) 0%, rgba(4,4,5,1) 100%)',  // Completion Outro block
+      12: 'radial-gradient(circle at center, rgba(20,5,10,0.9) 0%, rgba(4,4,5,1) 100%)'     // Epilogue deep raspberry transition
+    };
+
+    // Cascade image fallback path strings to support ANY user image uploaded structure
+    function tryCascadeLoad(idx, imgElement, attempt = 0) {
+      const Y = idx - 1; // Input images are 0-indexed under standard files
+      
+      const pathList = [
+        `/manga_page_${idx}.png`,
+        `/manga_${idx}.png`,
+        `/page${idx}.png`,
+        `/page_${idx}.png`,
+        `/manga_page_${idx}.jpg`,
+        `/manga_${idx}.jpg`,
+        `/page${idx}.jpg`,
+        `/page_${idx}.jpg`,
+        `/manga_page_${idx}.jpeg`,
+        `/manga_${idx}.jpeg`,
+        `/page${idx}.jpeg`,
+        `/page_${idx}.jpeg`,
+        `/input_file_${Y}.png`,
+        `/input_file_${Y}.jpg`,
+        `/input_file_${Y}.jpeg`,
+        `/input_file_${Y}.webp`,
+        `/manga_page_${idx}.webp`,
+        `/manga_${idx}.webp`,
+        `/page${idx}.webp`,
+        `/page_${idx}.webp`
+      ];
+
+      if (attempt < pathList.length) {
+        imgElement.src = pathList[attempt];
+        imgElement.onerror = () => {
+          tryCascadeLoad(idx, imgElement, attempt + 1);
+        };
+      } else {
+        // Ultimate load failed, trigger beautiful high-end fallback card text layout!
+        console.warn(`Manga image ${idx} failed to compile paths. Unveiling graphic fallback card.`);
+        
+        const loaderOverlay = imgElement.parentElement.querySelector('.loader-overlay');
+        if (loaderOverlay) {
+          loaderOverlay.classList.add('opacity-0');
+          setTimeout(() => loaderOverlay.classList.add('hidden'), 500);
+        }
+        
+        const fallbackCard = imgElement.parentElement.querySelector('.fallback-card');
+        if (fallbackCard) {
+          fallbackCard.classList.remove('hidden');
+          // Add smooth fade in for fallback cards
+          fallbackCard.classList.add('animate-fade-in');
+        }
+      }
+    }
+
+    // Runs once image successfully loads to fade it in elegantly
+    function handleImageLoaded(img) {
+      // Hide spinner loader
+      const loaderOverlay = img.parentElement.querySelector('.loader-overlay');
+      if (loaderOverlay) {
+        loaderOverlay.classList.add('opacity-0');
+        setTimeout(() => loaderOverlay.classList.add('hidden'), 500);
+      }
+      
+      // Make image completely visible with animation entry
+      img.classList.remove('opacity-0');
+      img.classList.add('opacity-100');
+    }
+
+    // Main Init
+    window.addEventListener('load', () => {
+      // Start cascade load for page 1 in background
+      const img1 = document.getElementById('manga-page-img-1');
+      if (img1) {
+        tryCascadeLoad(1, img1);
+      }
+
+      // 1. Initialise Intersection Observer for graceful scroll entries & ambient transitions
+      const bgLayer1 = document.getElementById('bg-layer-1');
+      const bgLayer2 = document.getElementById('bg-layer-2');
+      const progressText = document.getElementById('progress-text');
+      
+      let currentActiveLayer = 1;
+      let lastFocusedIdx = null;
+
+      function triggerAmbientCrossfade(idx) {
+        const targetGrad = bgGradients[idx] || bgGradients[1];
+        if (currentActiveLayer === 1) {
+          bgLayer2.style.backgroundImage = targetGrad;
+          bgLayer2.style.opacity = '1';
+          bgLayer1.style.opacity = '0';
+          currentActiveLayer = 2;
+        } else {
+          bgLayer1.style.backgroundImage = targetGrad;
+          bgLayer1.style.opacity = '1';
+          bgLayer2.style.opacity = '0';
+          currentActiveLayer = 1;
+        }
+      }
+
+      const observerOptions = {
+        root: null,
+        rootMargin: '-5% 0px -15% 0px', // slightly offset for earlier scroll triggers
+        threshold: 0.15 // 15% intersection
+      };
+
+      const scrollObserver = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            // Elegant Slide up + Fade in animation
+            entry.target.classList.remove('opacity-0', 'translate-y-8');
+            entry.target.classList.add('opacity-100', 'translate-y-0');
+
+            const pageIdx = parseInt(entry.target.getAttribute('data-page'));
+            if (pageIdx && pageIdx !== lastFocusedIdx) {
+              lastFocusedIdx = pageIdx;
+              
+              // Dynamic background transition
+              triggerAmbientCrossfade(pageIdx);
+              
+              // Dynamic progress update
+              if (pageIdx <= 10) {
+                progressText.innerText = `${pageIdx} / 10`;
+              } else if (pageIdx === 11) {
+                progressText.innerText = `FINALE`;
+              } else if (pageIdx === 12) {
+                progressText.innerText = `EPILOGUE`;
+              } else {
+                progressText.innerText = `FINALE`;
+              }
+            }
+          }
+        });
+      }, observerOptions);
+
+      // Register and trigger observation on cards
+      document.querySelectorAll('.manga-page-card').forEach((card) => {
+        scrollObserver.observe(card);
+      });
+
+      // 2. High-performance elegant floating dust canvas simulation background
+      initCanvasParticles();
+
+      // 3. Epilogue click fading transition and redirect logic
+      const epilogueText = document.getElementById('epilogue-trigger-text');
+      if (epilogueText) {
+        epilogueText.addEventListener('click', () => {
+          document.body.classList.add('faded-to-black');
+          setTimeout(() => {
+            window.location.href = 'page3.html';
+          }, 1500);
+        });
+      }
+    });
+
+    // Cozy romantic ambient floating background dots
+    function initCanvasParticles() {
+      const canvas = document.getElementById('ambient-particles');
+      if (!canvas) return;
+      
+      const ctx = canvas.getContext('2d');
+      let particles = [];
+      
+      function resizeCanvas() {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+      }
+      
+      window.addEventListener('resize', resizeCanvas);
+      resizeCanvas();
+      
+      class Particle {
+        constructor() {
+          this.reset();
+          this.y = Math.random() * canvas.height; // spread horizontally initially
+        }
+        
+        reset() {
+          this.x = Math.random() * canvas.width;
+          this.y = canvas.height + Math.random() * 30;
+          this.size = Math.random() * 2 + 0.4;
+          this.speedY = -(Math.random() * 0.45 + 0.15);
+          this.speedX = (Math.random() * 0.2 - 0.1);
+          this.opacity = Math.random() * 0.4 + 0.1;
+          this.amplitude = Math.random() * 1.5 + 0.5;
+          this.frequency = Math.random() * 0.005 + 0.001;
+          this.time = Math.random() * 100;
+          
+          // Random soft-hue pink vs clean warm gold filters
+          const colorPool = [
+            '227, 11, 92',   // Soft Pink Raspberry
+            '255, 182, 193', // Delicate Light Pink
+            '253, 186, 116', // Warm Sunset Amber
+            '255, 255, 255'  // Bright Pure Star
+          ];
+          this.color = colorPool[Math.floor(Math.random() * colorPool.length)];
+        }
+        
+        update() {
+          this.y += this.speedY;
+          this.time++;
+          this.x += this.speedX + Math.sin(this.time * this.frequency) * 0.1 * this.amplitude;
+          
+          // Fade away near borders
+          if (this.y < 50 || this.x < 0 || this.x > canvas.width) {
+            this.opacity -= 0.005;
+          }
+          if (this.opacity <= 0) {
+            this.reset();
+          }
+        }
+        
+        draw() {
+          ctx.beginPath();
+          ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+          ctx.fillStyle = `rgba(${this.color}, ${this.opacity})`;
+          ctx.shadowBlur = this.size * 3;
+          ctx.shadowColor = `rgb(${this.color})`;
+          ctx.fill();
+        }
+      }
+      
+      // Populate particles count based on width for mobile optimization
+      const maxCount = window.innerWidth < 768 ? 30 : 75;
+      for (let i = 0; i < maxCount; i++) {
+        particles.push(new Particle());
+      }
+      
+      // Infinite render loop
+      function animate() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        
+        // Disable shadowBlur for secondary paints for performant rendering
+        ctx.shadowBlur = 0;
+        
+        for (let i = 0; i < particles.length; i++) {
+          particles[i].update();
+          particles[i].draw();
+        }
+        requestAnimationFrame(animate);
+      }
+      animate();
+    }
+  </script>
+
+  <!-- Persistent Dual-Song Playlist Audio Controller -->
+  <script>
+    (function() {
+      const playlist = [
+        "/Something Just Like This.mp3",
+        "/There is a light that never goes out.mp3"
+      ];
+      
+      let currentTrackIndex = parseInt(localStorage.getItem("bg_music_track_index") || "0", 10);
+      if (currentTrackIndex < 0 || currentTrackIndex >= playlist.length) {
+        currentTrackIndex = 0;
+      }
+      
+      let isMuted = localStorage.getItem("bg_music_muted") !== "false"; // default to muted unless explicitly unmuted
+      let audio = null;
+      let saveInterval = null;
+
+      function initAudio() {
+        if (audio) return;
+        
+        currentTrackIndex = parseInt(localStorage.getItem("bg_music_track_index") || "0", 10);
+        if (currentTrackIndex < 0 || currentTrackIndex >= playlist.length) {
+          currentTrackIndex = 0;
+        }
+        const savedTime = parseFloat(localStorage.getItem("bg_music_track_time") || "0");
+
+        audio = new Audio(playlist[currentTrackIndex]);
+        audio.volume = 0.15; // Soft cinematic background volume
+        audio.currentTime = savedTime;
+        
+        audio.addEventListener("ended", () => {
+          nextTrack();
+        });
+
+        saveInterval = setInterval(() => {
+          if (audio && !audio.paused) {
+            localStorage.setItem("bg_music_track_time", audio.currentTime.toString());
+          }
+        }, 1000);
+
+        // Try playing if unmuted
+        if (!isMuted) {
+          const playPromise = audio.play();
+          if (playPromise !== undefined) {
+            playPromise.catch(e => {
+              console.log("Auto-play deferred until user document interaction.", e);
+            });
+          }
+        }
+      }
+
+      function nextTrack() {
+        if (!audio) return;
+        audio.pause();
+        currentTrackIndex = (currentTrackIndex + 1) % playlist.length;
+        localStorage.setItem("bg_music_track_index", currentTrackIndex.toString());
+        localStorage.setItem("bg_music_track_time", "0");
+        audio.src = playlist[currentTrackIndex];
+        audio.currentTime = 0;
+        if (!isMuted) {
+          audio.play().catch(e => console.log("Next track play prevented", e));
+        }
+        updateButtonUI();
+      }
+
+      function toggleMute() {
+        isMuted = !isMuted;
+        localStorage.setItem("bg_music_muted", isMuted ? "true" : "false");
+        
+        if (isMuted) {
+          if (audio) {
+            audio.pause();
+            localStorage.setItem("bg_music_track_time", audio.currentTime.toString());
+          }
+        } else {
+          if (!audio) {
+            initAudio();
+          } else {
+            audio.play().catch(e => console.log("Audio play deferred", e));
+          }
+        }
+        updateButtonUI();
+      }
+
+      function createAudioControls() {
+        const parent = document.createElement("div");
+        parent.id = "global-music-pill";
+        // Fixed positioning in bottom right corner with beautiful design elements
+        parent.className = "fixed bottom-6 right-6 z-[100] flex items-center gap-3 bg-stone-950/85 backdrop-blur border border-white/10 rounded-full px-4 py-2.5 text-white shadow-[0_4px_30px_rgba(227,11,92,0.15)] pointer-events-auto transition-all duration-300 hover:border-raspberry/50 group select-none";
+        
+        const audioWave = document.createElement("div");
+        audioWave.className = "flex items-end gap-[3px] h-3 w-4 shrink-0 mb-0.5";
+        for (let i = 0; i < 4; i++) {
+          const bar = document.createElement("span");
+          bar.className = "w-[2px] bg-raspberry rounded-full origin-bottom transform transition-all duration-300";
+          bar.style.height = "15%";
+          bar.id = `wave-bar-${i}`;
+          audioWave.appendChild(bar);
+        }
+
+        const titleDiv = document.createElement("div");
+        titleDiv.className = "flex flex-col text-left leading-none";
+        
+        const smallLabel = document.createElement("span");
+        smallLabel.className = "font-mono text-[8px] text-stone-500 uppercase tracking-widest";
+        smallLabel.innerText = "Ambient Loop";
+
+        const titleSpan = document.createElement("span");
+        titleSpan.className = "font-sans text-[10px] font-medium text-stone-300 max-w-[150px] truncate select-none transition-colors group-hover:text-stone-100 mt-0.5 h-[12px] leading-tight";
+        titleSpan.id = "music-title-display";
+        
+        // Clean display name of song (unescaping url encodings or names)
+        const rawName = playlist[currentTrackIndex].substring(1).replace(".mp3", "");
+        titleSpan.innerText = rawName;
+
+        titleDiv.appendChild(smallLabel);
+        titleDiv.appendChild(titleSpan);
+
+        const toggleBtn = document.createElement("button");
+        toggleBtn.className = "ml-2 hover:text-raspberry transition-all duration-300 flex items-center justify-center p-1.5 rounded-full bg-stone-900 hover:bg-stone-800 border border-white/5 shadow-inner cursor-pointer animate-none outline-none";
+        toggleBtn.innerHTML = getIconSVG();
+        toggleBtn.addEventListener("click", (e) => {
+          e.stopPropagation();
+          toggleMute();
+        });
+
+        parent.appendChild(audioWave);
+        parent.appendChild(titleDiv);
+        parent.appendChild(toggleBtn);
+        
+        document.body.appendChild(parent);
+
+        // Animate wave lines periodically
+        function animateWave() {
+          const isCurrentlyPlaying = audio && !audio.paused && !isMuted;
+          for (let i = 0; i < 4; i++) {
+            const bar = document.getElementById(`wave-bar-${i}`);
+            if (bar) {
+              if (isCurrentlyPlaying) {
+                const h = Math.floor(Math.random() * 85) + 15;
+                bar.style.height = `${h}%`;
+              } else {
+                bar.style.height = "15%";
+              }
+            }
+          }
+          setTimeout(animateWave, 150);
+        }
+        animateWave();
+        updateButtonUI();
+      }
+
+      function getIconSVG() {
+        if (isMuted) {
+          return `<svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color: #F43F5E"><path d="M11 5 6 9 2 9v6h4l5 4V5z"/><line x1="22" x2="16" y1="9" y2="15"/><line x1="16" x2="22" y1="9" y2="15"/></svg>`;
+        } else {
+          return `<svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color: #F43F5E"><path d="M11 5 6 9 2 9v6h4l5 4V5z"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/></svg>`;
+        }
+      }
+
+      function updateButtonUI() {
+        const titleSpan = document.getElementById("music-title-display");
+        if (titleSpan) {
+          const rawName = playlist[currentTrackIndex].substring(1).replace(".mp3", "");
+          titleSpan.innerText = rawName;
+        }
+        const pill = document.getElementById("global-music-pill");
+        if (pill) {
+          const btn = pill.querySelector("button");
+          if (btn) btn.innerHTML = getIconSVG();
+        }
+      }
+
+      // Automatically play once clicked anywhere (browser click pass policy)
+      document.addEventListener("click", () => {
+        if (!audio) {
+          initAudio();
+        } else if (!isMuted && audio.paused) {
+          audio.play().catch(e => console.log("User interaction audio resume policy active", e));
+        }
+      }, { once: false });
+
+      // Temporarily pause audio when document becomes invisible (tab backgrounded)
+      document.addEventListener("visibilitychange", () => {
+        if (document.hidden) {
+          if (audio && !audio.paused) {
+            audio.pause();
+          }
+        } else {
+          if (audio && !isMuted) {
+            audio.play().catch(e => console.log("Visibility resume play avoided", e));
+          }
+        }
+      });
+
+      // Save play coordinates beforeunload
+      window.addEventListener("beforeunload", () => {
+        if (audio) {
+          localStorage.setItem("bg_music_track_time", audio.currentTime.toString());
+        }
+      });
+
+      // Start
+      initAudio();
+      
+      // Delay UI load slightly to prevent rendering before HTML body parses
+      setTimeout(() => {
+        createAudioControls();
+      }, 300);
+      
+    })();
+  </script>
+
+</body>
+</html>

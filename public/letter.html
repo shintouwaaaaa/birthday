@@ -1,0 +1,617 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>A Letter For Durie — Happy Birthday</title>
+
+  <!-- Google Fonts: Elegant Display/Body fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@500;700&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&display=swap" rel="stylesheet">
+
+  <!-- Tailwind CSS CDN for styling utility -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            raspberry: '#E30B5C',
+          },
+          fontFamily: {
+            decorative: ['"Dancing Script"', 'cursive', 'serif'],
+            serif: ['"Cormorant Garamond"', 'Georgia', 'serif'],
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    /* Prevent scrollbar during entrance but allow scrolling for the letter body once loaded */
+    html {
+      background-color: #000000;
+      color: #f0f0f0;
+      overflow-x: hidden;
+    }
+    
+    body {
+      margin: 0;
+      padding: 0;
+      background-color: #000000;
+      min-height: 100vh;
+      position: relative;
+    }
+
+    /* Soft, dark dark blur filter for the background container and children items */
+    .bg-memory-item {
+      position: absolute;
+      pointer-events: none;
+      z-index: 1;
+      filter: blur(1px) brightness(0.75) contrast(1.05);
+      transition: opacity 1.5s ease-in-out;
+      border-radius: 12px;
+      overflow: hidden;
+      border: 1px solid rgba(227, 11, 92, 0.15);
+      background-color: rgba(15, 10, 12, 0.6);
+      box-shadow: 0 4px 30px rgba(0, 0, 0, 0.8);
+    }
+
+    /* Breathing soft glow animation for the Central Gift Button */
+    @keyframes soft-raspberry-pulse {
+      0%, 100% {
+        box-shadow: 0 0 15px rgba(227, 11, 92, 0.4), 0 0 5px rgba(227, 11, 92, 0.2);
+        transform: scale(1.0);
+      }
+      50% {
+        box-shadow: 0 0 30px rgba(227, 11, 92, 0.85), 0 0 15px rgba(227, 11, 92, 0.4);
+        transform: scale(1.03);
+      }
+    }
+
+    .gift-btn-glow {
+      animation: soft-raspberry-pulse 3.5s infinite ease-in-out;
+    }
+
+    /* Elegant, subtle delay staggered animations for each letter paragraph element */
+    .letter-p {
+      opacity: 0;
+      transform: translateY(24px);
+      transition: opacity 1.6s cubic-bezier(0.215, 0.610, 0.355, 1.000), transform 1.6s cubic-bezier(0.215, 0.610, 0.355, 1.000);
+    }
+
+    .letter-p.revealed {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* Vignette dark shadow filter surrounding the letter layout */
+    .cinematic-vignette {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 5;
+      background: radial-gradient(circle, transparent 40%, rgba(0,0,0,0.85) 95%);
+    }
+
+    /* Gentle scrollbar styling */
+    ::-webkit-scrollbar {
+      width: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #000000;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: rgba(227,11,92,0.3);
+      border-radius: 3px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: rgba(227,11,92,0.6);
+    }
+  </style>
+</head>
+<body class="selection:bg-raspberry selection:text-white font-serif antialiased pb-24">
+
+  <!-- Cinematic Vignette frame -->
+  <div class="cinematic-vignette"></div>
+
+  <!-- Background Floating Canvas System Container -->
+  <div id="ambient-floating-canvas" class="absolute inset-0 overflow-hidden pointer-events-none z-0 min-h-full">
+    <!-- Managed via JavaScript to generate 10-15 falling image-fit div containers -->
+  </div>
+
+  <!-- Main Central Container -->
+  <main class="relative z-10 w-full max-w-2xl mx-auto px-6 pt-20 md:pt-32 text-center flex flex-col items-center">
+    
+    <!-- Title Section -->
+    <header class="mb-14 md:mb-20 select-none">
+      <h1 class="font-decorative text-5xl md:text-6xl text-raspberry drop-shadow-[0_2px_12px_rgba(227,11,92,0.4)] tracking-wide mb-2 opacity-0 -translate-y-4 transition-all duration-1000 delay-300 animate-entrance">
+        Happy Birthday Durie! <3
+      </h1>
+      <div class="h-[1px] w-24 mx-auto bg-gradient-to-r from-transparent via-raspberry/60 to-transparent mt-4"></div>
+    </header>
+
+    <!-- VERBATIM LETTER BODY COLUMN -->
+    <article class="space-y-10 md:space-y-12 text-[#f0f0f0] text-lg md:text-xl font-light leading-relaxed tracking-wide text-justify md:text-center select-text">
+      
+      <!-- Paragraph 1 -->
+      <p class="letter-p text-stone-100">
+        I just wanted to say, when I said 'I really don't have any reason to love you,' I wanted you to know that there is no single thing which leads me to love you. No reason. It's just that I really love all the time I spend with you, staying with you—whatever it is where you are included, it simply makes my heart pound. Throughout my whole day, I am constantly thinking about you.
+      </p>
+
+      <!-- Paragraph 2 -->
+      <p class="letter-p text-stone-100">
+        I am sorry if I ever hurt you; all I want is to spend all the time we have together. I want you to stay mine, forever. I'm really not that creative, good, or romantic enough to make you know how I feel about you, but I don't want to lose you.
+      </p>
+
+      <!-- Paragraph 3 -->
+      <p class="letter-p text-stone-100">
+        All the time I spent with you became a core memory for me. From ragebaiting each other in pubs to playing together in scrims; watching you go from being a 'new gen' to a top renowned player; sharing everything on our minds with each other to goofing around—I cherish everything.
+      </p>
+
+      <!-- Paragraph 4 -->
+      <p class="letter-p text-stone-100">
+        I hope you truly have a beautiful day today, and I wish to celebrate every birthday of yours together <3. I really love my baby <33.
+      </p>
+
+      <!-- Paragraph 5 (To cope with my creativity...) -->
+      <p class="letter-p font-decorative text-2xl md:text-3xl text-raspberry/90 tracking-wide mt-12 mb-6">
+        To cope with my creativity...
+      </p>
+
+    </article>
+
+    <!-- Beautiful central breathing custom button -->
+    <div id="gift-button-wrapper" class="opacity-0 translateY(24px) transition-all duration-1000 mt-12 md:mt-16 z-20">
+      <a 
+        href="#" 
+        class="inline-block relative group pointer-events-auto"
+      >
+        <!-- Intense beautiful background glow -->
+        <div class="absolute -inset-1.5 rounded-full bg-gradient-to-r from-raspberry via-[#A60840] to-raspberry opacity-60 group-hover:opacity-100 blur-lg transition duration-700"></div>
+        
+        <button class="relative px-10 py-4.5 bg-black hover:bg-stone-950 border border-raspberry/65 rounded-full text-stone-100 text-xs md:text-sm uppercase tracking-[0.25em] font-mono hover:text-white transition duration-300 gift-btn-glow cursor-pointer">
+          Here's a little gift from me!
+        </button>
+      </a>
+    </div>
+
+  </main>
+
+  <!-- Fullscreen Spotlight Transition Screen -->
+  <div id="spotlight-overlay" class="fixed inset-0 bg-black/95 z-[150] flex flex-col justify-center items-center opacity-0 pointer-events-none transition-all duration-[1200ms] cubic-bezier(0.16, 1, 0.3, 1) px-6 select-none">
+    <!-- Ambient radial glow based on the raspberry accent -->
+    <div class="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(227,11,92,0.16)_0%,transparent_70%)] pointer-events-none"></div>
+    
+    <div class="relative z-10 flex flex-col items-center max-w-md w-full text-center">
+      <!-- Above picture text -->
+      <h2 class="font-decorative text-4xl md:text-5xl text-raspberry drop-shadow-[0_2px_15px_rgba(227,11,92,0.5)] mb-8 tracking-wide text-center opacity-0 -translate-y-6 transition-all duration-[1000ms] ease-out" id="spotlight-title">
+        I really love you &lt;3
+      </h2>
+
+      <!-- mem-9 framed central spotlight image -->
+      <div class="relative w-72 md:w-80 max-w-[85vw] max-h-[50vh] aspect-square rounded-2xl overflow-hidden border border-white/10 p-2.5 bg-zinc-950/90 shadow-[0_0_50px_rgba(227,11,92,0.35)] mb-8 opacity-0 scale-95 transition-all duration-[1200ms] ease-out" id="spotlight-image-holder">
+        <div class="relative w-full h-full rounded-xl overflow-hidden flex items-center justify-center">
+          <img src="mem-9.png" class="max-w-full max-h-full object-contain select-none" alt="Beautiful Spot">
+        </div>
+        <div class="absolute inset-0 bg-gradient-to-tr from-white/0 via-white/5 to-white/0 pointer-events-none"></div>
+      </div>
+
+      <!-- Below picture text -->
+      <p class="font-serif text-xl md:text-2xl text-stone-200 tracking-wide font-light mb-8 opacity-0 translate-y-6 transition-all duration-[1000ms] ease-out" id="spotlight-subtitle">
+        Thank you for being with me
+      </p>
+
+      <!-- Countdown tracker styled to breathe -->
+      <div class="inline-flex items-center gap-3 px-5 py-2.5 rounded-full bg-stone-900 border border-raspberry/30 backdrop-blur font-mono text-[10px] md:text-xs text-stone-400 tracking-widest uppercase opacity-0 transition-opacity duration-[1000ms]" id="spotlight-countdown">
+        <span>Your gift arrives in</span>
+        <span id="countdown-timer" class="font-sans font-bold text-xs text-white bg-raspberry rounded-full w-5 h-5 flex items-center justify-center shadow-[0_2px_8px_rgba(227,11,92,0.5)]">5</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Background Music Controller Widget -->
+  <div class="visual-indicator fixed bottom-6 left-6 z-[100] flex items-center gap-2 pointer-events-none select-none opacity-50 hover:opacity-100 transition-opacity">
+    <div class="w-1.5 h-1.5 rounded-full bg-raspberry animate-ping"></div>
+    <span class="font-mono text-[9px] text-stone-500 uppercase tracking-widest leading-none mt-0.5">Dual-Playlist Music active</span>
+  </div>
+
+  <!-- Foreground Animations Scripts -->
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      // 1. Title appearance trigger
+      const headerTitle = document.querySelector("header h1");
+      if (headerTitle) {
+        headerTitle.style.opacity = "1";
+        headerTitle.style.transform = "translateY(0)";
+      }
+
+      // 2. Elegantly fade and drift up paragraph by paragraph
+      const paragraphs = document.querySelectorAll(".letter-p");
+      paragraphs.forEach((p, index) => {
+        // Stagger paragraph entrance safely with timeout frames
+        setTimeout(() => {
+          p.classList.add("revealed");
+        }, 1100 + (index * 1300)); // Scenic slow read pace progression
+      });
+
+      // 3. Fade in final button at the very end
+      const buttonWrapper = document.getElementById("gift-button-wrapper");
+      if (buttonWrapper) {
+        setTimeout(() => {
+          buttonWrapper.style.opacity = "1";
+          buttonWrapper.style.transform = "translateY(0)";
+        }, 1100 + (paragraphs.length * 1300) + 400);
+      }
+
+      // Interactive Transition triggers
+      const giftBtn = document.querySelector("#gift-button-wrapper a");
+      const spotlightOverlay = document.getElementById("spotlight-overlay");
+      const sptTitle = document.getElementById("spotlight-title");
+      const sptImg = document.getElementById("spotlight-image-holder");
+      const sptSub = document.getElementById("spotlight-subtitle");
+      const sptCount = document.getElementById("spotlight-countdown");
+      const timerSpan = document.getElementById("countdown-timer");
+
+      if (giftBtn && spotlightOverlay) {
+        giftBtn.addEventListener("click", (e) => {
+          e.preventDefault();
+          
+          // Show overlay spotlight view
+          spotlightOverlay.classList.remove("pointer-events-none");
+          spotlightOverlay.classList.add("opacity-100");
+          
+          // Progressively pop-in elements cinematically
+          setTimeout(() => {
+            sptTitle.style.opacity = "1";
+            sptTitle.style.transform = "translateY(0)";
+          }, 650);
+
+          setTimeout(() => {
+            sptImg.style.opacity = "1";
+            sptImg.style.transform = "scale(1)";
+          }, 1100);
+
+          setTimeout(() => {
+            sptSub.style.opacity = "1";
+            sptSub.style.transform = "translateY(0)";
+          }, 1550);
+
+          setTimeout(() => {
+            sptCount.style.opacity = "1";
+          }, 2000);
+
+          // Counter count-down logic starting from 5 seconds
+          let timerVal = 5;
+          const countRun = setInterval(() => {
+            timerVal--;
+            if (timerSpan) {
+              timerSpan.innerText = timerVal.toString();
+            }
+            if (timerVal <= 0) {
+              clearInterval(countRun);
+              // Fade completely to back and route out
+              spotlightOverlay.style.backgroundColor = "#000000";
+              spotlightOverlay.style.transition = "background-color 1.2s ease-out";
+              setTimeout(() => {
+                window.location.href = 'https://www.roblox.com/';
+                try {
+                  window.top.location.href = 'https://www.roblox.com/';
+                } catch (e) {
+                  console.log("Top redirect fallback skipped: ", e);
+                }
+              }, 900);
+            }
+          }, 1000);
+        });
+      }
+
+      // 4. Background animation system generating 10-15 floating, varying-sized div elements 
+      // with user-provided floating image filenames drifting gently downwards
+      const floatContainer = document.getElementById("ambient-floating-canvas");
+      
+      const realUploadedImages = [
+        "mem-1.jpg",
+        "mem-2.png",
+        "mem-3.png",
+        "mem-4.png",
+        "mem-5.png",
+        "mem-6.png",
+        "mem-7.png",
+        "mem-8.png"
+      ];
+      
+      const numElements = 15; 
+      
+      // Secondary fallback high-fidelity pictures in case local load delays
+      const fallbackImages = [
+        "https://images.unsplash.com/photo-1544005313-94ddf0286df2?q=80&w=350",
+        "https://images.unsplash.com/photo-1518156677180-95a2893f3e9f?q=80&w=350",
+        "https://images.unsplash.com/photo-1516589178581-6cd7833ae3b2?q=80&w=350",
+        "https://images.unsplash.com/photo-1534447677768-be436bb09401?q=80&w=350"
+      ];
+
+      // Helper to generate coordinates only on outer left (0-20%) or outer right (80-100%)
+      function getRandomEdgeX() {
+        const isLeft = Math.random() < 0.5;
+        return isLeft ? (Math.random() * 20) : (80 + Math.random() * 20);
+      }
+
+      for (let i = 1; i <= numElements; i++) {
+        const floatDiv = document.createElement("div");
+        floatDiv.className = "bg-memory-item opacity-0";
+        
+        // Varying random details
+        const size = Math.floor(Math.random() * 85) + 85; 
+        const startX = getRandomEdgeX(); 
+        
+        floatDiv.style.width = `${size}px`;
+        floatDiv.style.height = `${size * 1.3}px`; // Polaroid vertical portrait ratio aspect
+        floatDiv.style.left = `${startX}%`;
+        
+        // Random rotational offsets
+        const initRotate = (Math.random() * 30) - 15; 
+        floatDiv.style.transform = `rotate(${initRotate}deg) translateY(-20px)`;
+
+        // Image component
+        const img = document.createElement("img");
+        img.className = "w-full h-full object-cover select-none";
+        
+        // Match files exactly using cycle lists
+        const targetPicFile = realUploadedImages[(i - 1) % realUploadedImages.length];
+        img.src = targetPicFile;
+        
+        // Automatic high-capacity safety fallback
+        img.addEventListener("error", () => {
+          img.src = fallbackImages[(i - 1) % fallbackImages.length];
+        });
+
+        floatDiv.appendChild(img);
+        floatContainer.appendChild(floatDiv);
+
+        // Slow descend mechanics
+        let currentY = -150; 
+        let driftSpeed = 0.5 + (Math.random() * 0.4); 
+        let currentRotate = initRotate;
+        let rotSpeed = (Math.random() * 0.03) - 0.015; 
+
+        const initialDelay = Math.random() * 7000;
+        
+        setTimeout(() => {
+          floatDiv.style.opacity = (0.85 + (Math.random() * 0.1)).toString(); 
+          
+          function animationLoop() {
+            currentY += driftSpeed;
+            currentRotate += rotSpeed;
+            
+            const currentHeight = document.documentElement.scrollHeight || document.body.scrollHeight;
+            if (currentY > currentHeight + 120) {
+              currentY = -160;
+              floatDiv.style.left = `${getRandomEdgeX()}%`;
+            }
+            
+            floatDiv.style.transform = `translateY(${currentY}px) rotate(${currentRotate}deg)`;
+            requestAnimationFrame(animationLoop);
+          }
+          
+          animationLoop();
+        }, initialDelay);
+      }
+    });
+  </script>
+
+  <!-- Persistent Dual-Song Playlist Audio Controller -->
+  <script>
+    (function() {
+      const playlist = [
+        "/Something Just Like This.mp3",
+        "/There is a light that never goes out.mp3"
+      ];
+      
+      let currentTrackIndex = parseInt(localStorage.getItem("bg_music_track_index") || "0", 10);
+      if (currentTrackIndex < 0 || currentTrackIndex >= playlist.length) {
+        currentTrackIndex = 0;
+      }
+      
+      let isMuted = localStorage.getItem("bg_music_muted") !== "false"; 
+      let audio = null;
+      let saveInterval = null;
+
+      function initAudio() {
+        if (audio) return;
+        
+        currentTrackIndex = parseInt(localStorage.getItem("bg_music_track_index") || "0", 10);
+        if (currentTrackIndex < 0 || currentTrackIndex >= playlist.length) {
+          currentTrackIndex = 0;
+        }
+        const savedTime = parseFloat(localStorage.getItem("bg_music_track_time") || "0");
+
+        audio = new Audio(playlist[currentTrackIndex]);
+        audio.volume = 0.15; // Soft cinematic background volume
+        audio.currentTime = savedTime;
+        
+        audio.addEventListener("ended", () => {
+          nextTrack();
+        });
+
+        saveInterval = setInterval(() => {
+          if (audio && !audio.paused) {
+            localStorage.setItem("bg_music_track_time", audio.currentTime.toString());
+          }
+        }, 1000);
+
+        // Try playing if unmuted
+        if (!isMuted) {
+          const playPromise = audio.play();
+          if (playPromise !== undefined) {
+            playPromise.catch(e => {
+              console.log("Auto-play deferred until user document interaction in letter.", e);
+            });
+          }
+        }
+      }
+
+      function nextTrack() {
+        if (!audio) return;
+        audio.pause();
+        currentTrackIndex = (currentTrackIndex + 1) % playlist.length;
+        localStorage.setItem("bg_music_track_index", currentTrackIndex.toString());
+        localStorage.setItem("bg_music_track_time", "0");
+        audio.src = playlist[currentTrackIndex];
+        audio.currentTime = 0;
+        if (!isMuted) {
+          audio.play().catch(e => console.log("Next track play prevented", e));
+        }
+        updateButtonUI();
+      }
+
+      function toggleMute() {
+        isMuted = !isMuted;
+        localStorage.setItem("bg_music_muted", isMuted ? "true" : "false");
+        
+        if (isMuted) {
+          if (audio) {
+            audio.pause();
+            localStorage.setItem("bg_music_track_time", audio.currentTime.toString());
+          }
+        } else {
+          if (!audio) {
+            initAudio();
+          } else {
+            audio.play().catch(e => console.log("Audio play deferred", e));
+          }
+        }
+        updateButtonUI();
+      }
+
+      function createAudioControls() {
+        const parent = document.createElement("div");
+        parent.id = "global-music-pill";
+        // Fixed positioning in bottom right corner with beautiful design elements
+        parent.className = "fixed bottom-6 right-6 z-[100] flex items-center gap-3 bg-stone-950/85 backdrop-blur border border-white/10 rounded-full px-4 py-2.5 text-white shadow-[0_4px_30px_rgba(227,11,92,0.15)] pointer-events-auto transition-all duration-300 hover:border-raspberry/50 group select-none";
+        
+        const audioWave = document.createElement("div");
+        audioWave.className = "flex items-end gap-[3px] h-3 w-4 shrink-0 mb-0.5";
+        for (let i = 0; i < 4; i++) {
+          const bar = document.createElement("span");
+          bar.className = "w-[2px] bg-raspberry rounded-full origin-bottom transform transition-all duration-300";
+          bar.style.height = "15%";
+          bar.id = `wave-bar-${i}`;
+          audioWave.appendChild(bar);
+        }
+
+        const titleDiv = document.createElement("div");
+        titleDiv.className = "flex flex-col text-left leading-none";
+        
+        const smallLabel = document.createElement("span");
+        smallLabel.className = "font-mono text-[8px] text-stone-500 uppercase tracking-widest";
+        smallLabel.innerText = "Ambient Loop";
+
+        const titleSpan = document.createElement("span");
+        titleSpan.className = "font-sans text-[10px] font-medium text-stone-300 max-w-[150px] truncate select-none transition-colors group-hover:text-stone-100 mt-0.5 h-[12px] leading-tight";
+        titleSpan.id = "music-title-display";
+        
+        // Clean display name of song (unescaping url encodings or names)
+        const rawName = playlist[currentTrackIndex].substring(1).replace(".mp3", "");
+        titleSpan.innerText = rawName;
+
+        titleDiv.appendChild(smallLabel);
+        titleDiv.appendChild(titleSpan);
+
+        const toggleBtn = document.createElement("button");
+        toggleBtn.className = "ml-2 hover:text-raspberry transition-all duration-300 flex items-center justify-center p-1.5 rounded-full bg-stone-900 hover:bg-stone-800 border border-white/5 shadow-inner cursor-pointer animate-none outline-none";
+        toggleBtn.innerHTML = getIconSVG();
+        toggleBtn.addEventListener("click", (e) => {
+          e.stopPropagation();
+          toggleMute();
+        });
+
+        parent.appendChild(audioWave);
+        parent.appendChild(titleDiv);
+        parent.appendChild(toggleBtn);
+        
+        document.body.appendChild(parent);
+
+        // Animate wave lines periodically
+        function animateWave() {
+          const isCurrentlyPlaying = audio && !audio.paused && !isMuted;
+          for (let i = 0; i < 4; i++) {
+            const bar = document.getElementById(`wave-bar-${i}`);
+            if (bar) {
+              if (isCurrentlyPlaying) {
+                const h = Math.floor(Math.random() * 85) + 15;
+                bar.style.height = `${h}%`;
+              } else {
+                bar.style.height = "15%";
+              }
+            }
+          }
+          setTimeout(animateWave, 150);
+        }
+        animateWave();
+        updateButtonUI();
+      }
+
+      function getIconSVG() {
+        if (isMuted) {
+          return `<svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color: #F43F5E"><path d="M11 5 6 9 2 9v6h4l5 4V5z"/><line x1="22" x2="16" y1="9" y2="15"/><line x1="16" x2="22" y1="9" y2="15"/></svg>`;
+        } else {
+          return `<svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color: #F43F5E"><path d="M11 5 6 9 2 9v6h4l5 4V5z"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/></svg>`;
+        }
+      }
+
+      function updateButtonUI() {
+        const titleSpan = document.getElementById("music-title-display");
+        if (titleSpan) {
+          const rawName = playlist[currentTrackIndex].substring(1).replace(".mp3", "");
+          titleSpan.innerText = rawName;
+        }
+        const pill = document.getElementById("global-music-pill");
+        if (pill) {
+          const btn = pill.querySelector("button");
+          if (btn) btn.innerHTML = getIconSVG();
+        }
+      }
+
+      // Automatically play once clicked anywhere (browser click pass policy)
+      document.addEventListener("click", () => {
+        if (!audio) {
+          initAudio();
+        } else if (!isMuted && audio.paused) {
+          audio.play().catch(e => console.log("User interaction audio resume policy active", e));
+        }
+      }, { once: false });
+
+      // Temporarily pause audio when document becomes invisible (tab backgrounded)
+      document.addEventListener("visibilitychange", () => {
+        if (document.hidden) {
+          if (audio && !audio.paused) {
+            audio.pause();
+          }
+        } else {
+          if (audio && !isMuted) {
+            audio.play().catch(e => console.log("Visibility resume play avoided", e));
+          }
+        }
+      });
+
+      // Save play coordinates beforeunload
+      window.addEventListener("beforeunload", () => {
+        if (audio) {
+          localStorage.setItem("bg_music_track_time", audio.currentTime.toString());
+        }
+      });
+
+      // Start
+      initAudio();
+      
+      // Delay UI load slightly to prevent rendering before HTML body parses
+      setTimeout(() => {
+        createAudioControls();
+      }, 300);
+      
+    })();
+  </script>
+</body>
+</html>

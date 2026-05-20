@@ -1,0 +1,6 @@
+{
+  "name": "Birthday Greeting",
+  "description": "An elegant, minimalist single-page birthday greeting experience featuring a locked state, SHA-256 validation, and an interactive pulsating hibiscus flower.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

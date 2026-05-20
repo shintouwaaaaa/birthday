@@ -1,0 +1,736 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>The Symphony of Quiet — page3</title>
+
+  <!-- Google Fonts: Elegant Serif (Playfair Display) paired with Inter & JetBrains Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+  <!-- GSAP CDN -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+
+  <!-- Tailwind CSS CDN for styling utility -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            raspberry: '#E30B5C',
+          },
+          fontFamily: {
+            serif: ['"Playfair Display"', 'Georgia', 'serif'],
+            sans: ['Inter', 'system-ui', 'sans-serif'],
+            mono: ['"JetBrains Mono"', 'monospace']
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    /* Prevent default margins and scrolling */
+    html, body {
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      height: 100%;
+      background-color: #050505;
+      color: #f5f5f7;
+      overflow: hidden;
+    }
+
+    /* Fixed full screen video background container */
+    #video-container {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      z-index: 1;
+      overflow: hidden;
+      background-color: #050505;
+    }
+
+    #bg-video {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      opacity: 0;
+      transition: opacity 1.5s ease;
+    }
+
+    /* Elegant dark space background fallback (displays before video loads) */
+    #space-fallback-bg {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background-color: #050505;
+      background-image: 
+        radial-gradient(circle at 30% 20%, rgba(227, 11, 92, 0.05) 0%, transparent 40%),
+        radial-gradient(circle at 75% 80%, rgba(30, 10, 50, 0.2) 0%, transparent 60%),
+        radial-gradient(1.5px 1.5px at 30px 40px, #ffffff, rgba(0,0,0,0)),
+        radial-gradient(1px 1px at 80px 120px, rgba(255,255,255,0.8), rgba(0,0,0,0)),
+        radial-gradient(2px 2px at 150px 60px, rgba(235,235,255,0.7), rgba(0,0,0,0)),
+        radial-gradient(1.5px 1.5px at 220px 240px, #ffffff, rgba(0,0,0,0)),
+        radial-gradient(1px 1px at 310px 140px, rgba(255,255,255,0.5), rgba(0,0,0,0)),
+        radial-gradient(2.5px 2.5px at 420px 380px, rgba(227,11,92,0.3), rgba(0,0,0,0));
+      background-repeat: repeat;
+      background-size: 500px 500px;
+      z-index: 0;
+    }
+
+    /* Fixed overlaid frame centered on the page for narrative texts text */
+    #cinematic-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 10;
+      pointer-events: none; /* Let clicks pass through if needed */
+    }
+
+    .narrative-text {
+      position: absolute;
+      width: 90%;
+      max-width: 900px;
+      text-align: center;
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 1.2s cubic-bezier(0.25, 1, 0.5, 1), transform 1.2s cubic-bezier(0.25, 1, 0.5, 1);
+      text-shadow: 0 4px 20px rgba(0, 0, 0, 0.95), 0 2px 6px rgba(0, 0, 0, 0.85);
+    }
+
+    .narrative-text.active {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* Infinite glowing micro-pulse animation for buttons and details */
+    @keyframes subtle-pulse {
+      0%, 100% {
+        box-shadow: 0 0 15px rgba(227, 11, 92, 0.3);
+      }
+      50% {
+        box-shadow: 0 0 25px rgba(227, 11, 92, 0.6);
+      }
+    }
+
+    #finale-btn-glow {
+      animation: subtle-pulse 3s infinite ease-in-out;
+    }
+
+    /* Audio or video playback control hints */
+    .visual-indicator {
+      position: fixed;
+      bottom: 2rem;
+      left: 2rem;
+      z-index: 20;
+      font-size: 11px;
+      opacity: 0.5;
+      transition: opacity 0.3s ease;
+    }
+    .visual-indicator:hover {
+      opacity: 1;
+    }
+  </style>
+</head>
+<body class="selection:bg-raspberry selection:text-white relative">
+
+  <!-- Elegant dark star background fallback -->
+  <div id="space-fallback-bg"></div>
+
+  <!-- Video Background Layer -->
+  <div id="video-container">
+    <video id="bg-video" autoplay muted playsinline>
+      <!-- Supports standard name and extension variants in case of double extensions -->
+      <source src="universe-zoom.mp4" type="video/mp4">
+      <source src="universe-zoom.mp4.mp4" type="video/mp4">
+      <source src="/universe-zoom.mp4" type="video/mp4">
+      <source src="/universe-zoom.mp4.mp4" type="video/mp4">
+      <source src="../universe-zoom.mp4.mp4" type="video/mp4">
+    </video>
+  </div>
+
+  <!-- Smooth Video Fade to Pure Black Screen Block Overlay -->
+  <div id="fade-black-screen" class="fixed inset-0 bg-black opacity-0 z-5 pointer-events-none transition-opacity duration-[1.5s] ease-in-out"></div>
+
+  <!-- Narrative Texts Fixed Frame -->
+  <div id="cinematic-overlay">
+    <!-- Section 1 (0 to 4 seconds) -->
+    <h1 id="text-1" class="narrative-text text-4xl md:text-5xl lg:text-6xl font-serif italic text-stone-100 font-light tracking-wide leading-relaxed">
+      In a universe of endless noise...
+    </h1>
+
+    <!-- Section 2 (4 to 8 seconds) -->
+    <h1 id="text-2" class="narrative-text text-4xl md:text-5xl lg:text-6xl font-serif italic text-stone-100 font-light tracking-wide leading-relaxed">
+      ...out of billions of wandering souls...
+    </h1>
+
+    <!-- Section 3 (8 to 12 seconds) -->
+    <h1 id="text-3" class="narrative-text text-4xl md:text-5xl lg:text-6xl font-serif italic text-stone-100 font-light tracking-wide leading-relaxed">
+      ...the only one who captured my heart...
+    </h1>
+  </div>
+
+  <!-- CHAPTER 4: Finale Center Image Panel (Initially hidden, loads fully after 12s) -->
+  <div id="finale-wrapper" class="fixed inset-0 z-30 flex flex-col items-center justify-center opacity-0 scale-95 pointer-events-none transition-all duration-[2s] ease-out px-6 py-8">
+    
+    <!-- Polaroid Structure Cinematic Image Container -->
+    <div class="relative w-full max-w-lg aspect-[4/3] rounded-2xl overflow-hidden shadow-[0_25px_60px_rgba(227,11,92,0.18)] border-2 border-stone-850 bg-stone-950 p-3 mb-8 group hover:border-raspberry/50 transition-all duration-700">
+      <div class="w-full h-full rounded-xl overflow-hidden bg-stone-900 relative">
+        <!-- Main final memorial pic -->
+        <img 
+          id="finale-img"
+          src="Durie.png" 
+          alt="Our Shared Light" 
+          class="w-full h-full object-contain mix-blend-normal group-hover:scale-[1.03] transition-transform duration-[4s] ease-out"
+        >
+        <!-- High-fidelity Vector Fallback matching User's exact attached drawing (circular layout, pink cat ears, sweet smile) -->
+        <svg id="finale-svg" viewBox="0 0 500 500" class="hidden w-full h-full object-contain group-hover:scale-[1.03] transition-transform duration-[4s] ease-out z-10 relative">
+          <defs>
+            <linearGradient id="hairGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+              <stop offset="0%" stop-color="#FFE4E8" />
+              <stop offset="50%" stop-color="#FFD1D9" />
+              <stop offset="100%" stop-color="#FFAEC1" />
+            </linearGradient>
+            <linearGradient id="skinGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+              <stop offset="0%" stop-color="#FFF5F2" />
+              <stop offset="100%" stop-color="#FFEBE5" />
+            </linearGradient>
+          </defs>
+          
+          <!-- Outer circle white canvas card base -->
+          <circle cx="250" cy="250" r="235" fill="#fbf5f7" />
+          <circle cx="250" cy="250" r="234" fill="none" stroke="#ffe3ea" stroke-width="2" />
+          
+          <!-- FLOWING BACK HAIR -->
+          <path d="M120 220 Q110 320 130 420 Q140 450 160 450 Q180 430 170 380 Q160 300 180 220 Z" fill="url(#hairGrad)" />
+          <path d="M380 220 Q390 320 370 420 Q360 450 340 450 Q320 430 330 380 Q340 300 320 220 Z" fill="url(#hairGrad)" />
+          <path d="M100 280 Q90 360 120 440 Q130 460 145 440 Q145 380 130 320 Q120 290 100 280" fill="url(#hairGrad)" />
+          <path d="M400 280 Q410 360 380 440 Q370 460 355 440 Q355 380 370 320 Q380 290 400 280" fill="url(#hairGrad)" />
+
+          <!-- FLOATING ILLUSTRATIONS (CLOUDS, CATS, HEARTS) -->
+          <!-- Cloud Left -->
+          <path d="M90 135 A15 15 0 0 1 120 135 A12 12 0 0 1 135 145 A15 15 0 0 1 115 160 L95 160 A12 12 0 0 1 90 135 Z" fill="#ffffff" stroke="#1c1917" stroke-width="2.5" stroke-linejoin="round" />
+          <!-- Cloud Right -->
+          <path d="M380 115 A15 15 0 0 1 410 115 A12 12 0 0 1 425 125 A15 15 0 0 1 405 140 L385 140 A12 12 0 0 1 380 115 Z" fill="#ffffff" stroke="#1c1917" stroke-width="2.5" stroke-linejoin="round" />
+          <!-- Small cat floating left -->
+          <path d="M60 215 Q55 200 45 210 Q35 220 50 235 Q65 240 75 230 Q85 220 75 215 Z" fill="#ffffff" stroke="#1c1917" stroke-width="2.5" />
+          <circle cx="55" cy="220" r="1.5" fill="#1c1917" />
+          <circle cx="65" cy="222" r="1.5" fill="#1c1917" />
+          <path d="M58 224 Q60 226 62 224" stroke="#1c1917" stroke-width="1.5" fill="none" />
+          <!-- Tiny floating red hearts -->
+          <path d="M150 110 Q150 100 157 100 Q162 100 162 106 Q162 113 150 122 Q138 113 138 106 Q138 100 143 100 Q150 100 150 110" fill="#FDA4AF" stroke="#E30B5C" stroke-width="1.5" />
+          <path d="M350 240 Q350 232 355 232 Q360 232 360 237 Q360 243 350 250 Q340 243 340 237 Q340 232 345 232 Q350 232 350 240" fill="#f43f5e" />
+
+          <!-- PINK NEKOMIMI CAT EARS -->
+          <!-- Left Ear -->
+          <path d="M140 135 L225 105 Q240 140 205 175 Z" fill="url(#hairGrad)" stroke="#1c1917" stroke-width="3" stroke-linejoin="round" />
+          <path d="M155 137 L212 115 Q222 135 198 162 Z" fill="#FFAEC1" />
+          <!-- Right Ear -->
+          <path d="M360 135 L275 105 Q260 140 295 175 Z" fill="url(#hairGrad)" stroke="#1c1917" stroke-width="3" stroke-linejoin="round" />
+          <path d="M345 137 L288 115 Q278 135 302 162 Z" fill="#FFAEC1" />
+
+          <!-- COZY SHIELDING HAIR STRAND -->
+          <path d="M250 80 Q265 60 270 45 Q262 55 258 75 Z" fill="url(#hairGrad)" stroke="#1c1917" stroke-width="2.5" />
+
+          <!-- FACE BASE -->
+          <path d="M170 200 Q160 280 250 325 Q340 280 330 200 Z" fill="url(#skinGrad)" />
+
+          <!-- CHEEKS & BLUSH -->
+          <ellipse cx="195" cy="270" rx="20" ry="12" fill="#FFAEC1" opacity="0.6" />
+          <ellipse cx="305" cy="270" rx="20" ry="12" fill="#FFAEC1" opacity="0.6" />
+          <!-- Blush stripes -->
+          <line x1="188" y1="268" x2="194" y2="274" stroke="#f43f5e" stroke-width="2" stroke-linecap="round" />
+          <line x1="194" y1="266" x2="200" y2="272" stroke="#f43f5e" stroke-width="2" stroke-linecap="round" />
+          <line x1="298" y1="268" x2="304" y2="274" stroke="#f43f5e" stroke-width="2" stroke-linecap="round" />
+          <line x1="304" y1="266" x2="310" y2="272" stroke="#f43f5e" stroke-width="2" stroke-linecap="round" />
+
+          <!-- SWEET EYES CLOSED & EYE LASHES -->
+          <!-- Left Eye Arc -->
+          <path d="M185 242 Q208 266 230 242" fill="none" stroke="#1c1917" stroke-width="4.5" stroke-linecap="round" />
+          <!-- Left Eyelash -->
+          <line x1="188" y1="245" x2="178" y2="238" stroke="#1c1917" stroke-width="4.5" stroke-linecap="round" />
+          <!-- Right Eye Arc -->
+          <path d="M270 242 Q292 266 315 242" fill="none" stroke="#1c1917" stroke-width="4.5" stroke-linecap="round" />
+          <!-- Right Eyelash -->
+          <line x1="312" y1="245" x2="322" y2="238" stroke="#1c1917" stroke-width="4.5" stroke-linecap="round" />
+
+          <!-- SMILEY MOUTH -->
+          <path d="M238 278 Q250 288 262 278" fill="none" stroke="#1c1917" stroke-width="3" stroke-linecap="round" />
+
+          <!-- NOSE -->
+          <path d="M248 262 Q250 265 252 262" fill="none" stroke="#1c1917" stroke-width="2" />
+
+          <!-- LONG FLOWING FRONT HAIR & BANGS -->
+          <path d="M170 190 Q225 150 240 220" fill="none" stroke="#1c1917" stroke-width="3.5" />
+          <!-- Bangs Left -->
+          <path d="M165 180 Q215 182 220 225 Q195 210 165 180 Z" fill="url(#hairGrad)" stroke="#1c1917" stroke-width="3" stroke-linejoin="round" />
+          <!-- Bangs Middle -->
+          <path d="M210 160 Q250 185 245 235 Q235 195 210 160 Z" fill="url(#hairGrad)" stroke="#1c1917" stroke-width="3" stroke-linejoin="round" />
+          <!-- Bangs Right -->
+          <path d="M335 180 Q285 182 280 225 Q305 210 335 180 Z" fill="url(#hairGrad)" stroke="#1c1917" stroke-width="3" stroke-linejoin="round" />
+          
+          <!-- SIDE LOCKS -->
+          <path d="M170 195 Q145 280 165 345 Q175 370 185 345 Q180 300 182 220 Z" fill="url(#hairGrad)" stroke="#1c1917" stroke-width="3" stroke-linejoin="round" />
+          <path d="M330 195 Q355 280 335 345 Q325 370 315 345 Q320 300 318 220 Z" fill="url(#hairGrad)" stroke="#1c1917" stroke-width="3" stroke-linejoin="round" />
+          
+          <!-- HAIR BLACK BOWS -->
+          <!-- Left Bow -->
+          <path d="M150 215 Q140 195 130 215 L145 225 Z" fill="#1c1917" stroke="#1c1917" stroke-width="1" />
+          <path d="M150 215 Q160 195 170 215 L155 225 Z" fill="#1c1917" stroke="#1c1917" stroke-width="1" />
+          <circle cx="150" cy="215" r="4" fill="#292524" />
+          <!-- Bow tails -->
+          <path d="M148 218 L138 245" stroke="#1c1917" stroke-width="3" stroke-linecap="round" />
+          <path d="M152 218 L162 245" stroke="#1c1917" stroke-width="3" stroke-linecap="round" />
+
+          <!-- Right Bow -->
+          <path d="M350 215 Q340 195 330 215 L345 225 Z" fill="#1c1917" stroke="#1c1917" stroke-width="1" />
+          <path d="M350 215 Q360 195 370 215 L355 225 Z" fill="#1c1917" stroke="#1c1917" stroke-width="1" />
+          <circle cx="350" cy="215" r="4" fill="#292524" />
+          <!-- Bow tails -->
+          <path d="M348 218 L338 245" stroke="#1c1917" stroke-width="3" stroke-linecap="round" />
+          <path d="M352 218 L362 245" stroke="#1c1917" stroke-width="3" stroke-linecap="round" />
+
+          <!-- CLOTHES (PETER PAN COLLAR RUFFLES & BLACK TIE BOW) -->
+          <!-- Blouse neck base -->
+          <path d="M210 320 Q250 355 290 320 L275 420 L225 420 Z" fill="#ffffff" />
+          <!-- Left Collar -->
+          <path d="M210 320 Q250 350 248 350 Q230 350 215 335 Z" fill="#fcf6f8" stroke="#1c1917" stroke-width="2.5" />
+          <!-- Right Collar -->
+          <path d="M290 320 Q250 350 252 350 Q270 350 285 335 Z" fill="#fcf6f8" stroke="#1c1917" stroke-width="2.5" />
+          
+          <!-- Central ribbon tie bow -->
+          <path d="M250 348 Q235 338 238 353 Z" fill="#1c1917" stroke="#1c1917" stroke-width="1" />
+          <path d="M250 348 Q265 338 262 353 Z" fill="#1c1917" stroke="#1c1917" stroke-width="1" />
+          <circle cx="250" cy="348" r="4" fill="#191716" />
+          <!-- Ribbon tails -->
+          <path d="M248 350 Q235 385 230 395" stroke="#1c1917" stroke-width="3.5" stroke-linecap="round" />
+          <path d="M252 350 Q265 385 270 395" stroke="#1c1917" stroke-width="3.5" stroke-linecap="round" />
+
+          <!-- Bodice / Black high waist skirt top visible -->
+          <path d="M190 415 Q250 435 310 415 L320 465 L180 465 Z" fill="#1c1917" opacity="0.9" />
+          <path d="M190 415 Q250 435 310 415" fill="none" stroke="#1c1917" stroke-width="3" />
+        </svg>
+        <!-- Overlay subtle dramatic shadow mapping layer -->
+        <div class="absolute inset-0 bg-gradient-to-t from-stone-950/60 via-transparent to-transparent pointer-events-none"></div>
+      </div>
+    </div>
+
+    <!-- Final text fade component -->
+    <h2 id="final-words" class="text-3xl md:text-4xl lg:text-5xl font-serif italic text-stone-200 mb-8 tracking-wiest text-center select-none opacity-0 translate-y-4 transition-all duration-1000 delay-500">
+      ...was you.
+    </h2>
+
+    <!-- Clickable Roblox Roblox gift redirection button -->
+    <div id="action-trigger" class="opacity-0 translate-y-4 transition-all duration-1000 delay-[1.2s]">
+      <a 
+        href="letter.html" 
+        class="inline-block relative group pointer-events-auto"
+      >
+        <!-- Pink fuzzy background blur glow -->
+        <div class="absolute -inset-1 rounded-full bg-gradient-to-r from-raspberry via-[#BF094E] to-raspberry opacity-65 group-hover:opacity-95 blur-md transition duration-500"></div>
+        
+        <button id="finale-btn-glow" class="relative px-8 py-4 bg-stone-950 hover:bg-stone-900 border border-raspberry/45 rounded-full text-stone-100 text-xs md:text-sm uppercase tracking-[0.2em] font-mono hover:text-white transition duration-200">
+          ONE LAST THING...
+        </button>
+      </a>
+    </div>
+
+  </div>
+
+  <!-- Decorative cinematic visual hint overlay in corner -->
+  <div class="visual-indicator flex items-center gap-2">
+    <div class="w-2 h-2 rounded-full bg-raspberry animate-ping"></div>
+    <span class="font-mono text-stone-500 uppercase tracking-widest text-[9px]">Universe Zoom Cinema • Muted Playback</span>
+  </div>
+
+  <!-- Script Logic -->
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const video = document.getElementById("bg-video");
+      const text1 = document.getElementById("text-1");
+      const text2 = document.getElementById("text-2");
+      const text3 = document.getElementById("text-3");
+      const fadeScreen = document.getElementById("fade-black-screen");
+      const finaleWrapper = document.getElementById("finale-wrapper");
+      const finalWords = document.getElementById("final-words");
+      const actionTrigger = document.getElementById("action-trigger");
+
+      // Dynamic fallback for the finale image to load high-fidelity SVG illustration
+      const finaleImg = document.getElementById("finale-img");
+      const finaleSvg = document.getElementById("finale-svg");
+
+      if (finaleImg && finaleSvg) {
+        finaleImg.addEventListener("error", () => {
+          console.log("Local Durie.png not detected. Swapped seamlessly to custom Vector illustration fallback.");
+          finaleImg.classList.add("hidden");
+          finaleSvg.classList.remove("hidden");
+        });
+        
+        // Handle scenario where error triggered before event listener bound
+        if (finaleImg.complete && !finaleImg.naturalWidth) {
+          finaleImg.classList.add("hidden");
+          finaleSvg.classList.remove("hidden");
+        }
+      }
+
+      // Set video parameters securely
+      if (video) {
+        video.muted = true;
+        video.playsInline = true;
+        video.currentTime = 0;
+
+        // Ensure video is visible as soon as it starts to flow
+        video.addEventListener("playing", () => {
+          gsap.to(video, { opacity: 1, duration: 1 });
+        });
+
+        // Trigger safe auto-play
+        const playPromise = video.play();
+        if (playPromise !== undefined) {
+          playPromise.catch(error => {
+            console.log("Autoplay was prevented by browser security profile. Waiting for user interaction to begin movie.", error);
+            // Click any point of the body as a backup play event trigger
+            document.body.addEventListener("click", () => {
+              video.play();
+            }, { once: true });
+          });
+        }
+      }
+
+      // ===================================
+      // HIGH-ACCURACY PLAYBACK STATES LOGIC
+      // ===================================
+
+      let step1Processed = false;
+      let step2Processed = false;
+      let step3Processed = false;
+      let step4Processed = false;
+
+      function checkPlaybackState(coordsTime) {
+        // Step 1: 0 to 4 seconds
+        if (coordsTime >= 0.1 && coordsTime < 3.8) {
+          if (!step1Processed) {
+            text1.classList.add("active");
+            step1Processed = true;
+          }
+        } else {
+          if (step1Processed && (coordsTime >= 3.8 || coordsTime < 0.1)) {
+            text1.classList.remove("active");
+            step1Processed = false;
+          }
+        }
+
+        // Step 2: 4 to 8 seconds
+        if (coordsTime >= 4.0 && coordsTime < 7.8) {
+          if (!step2Processed) {
+            text2.classList.add("active");
+            step2Processed = true;
+          }
+        } else {
+          if (step2Processed && (coordsTime >= 7.8 || coordsTime < 4.0)) {
+            text2.classList.remove("active");
+            step2Processed = false;
+          }
+        }
+
+        // Step 3: 8 to 12 seconds
+        if (coordsTime >= 8.0 && coordsTime < 11.5) {
+          if (!step3Processed) {
+            text3.classList.add("active");
+            step3Processed = true;
+          }
+        } else {
+          if (step3Processed && (coordsTime >= 11.5 || coordsTime < 8.0)) {
+            text3.classList.remove("active");
+            step3Processed = false;
+          }
+        }
+
+        // Step 4: Beyond 11.8 seconds (Smooth fade transition to the photograph)
+        if (coordsTime >= 11.8) {
+          if (!step4Processed) {
+            triggerGrandFinale();
+            step4Processed = true;
+          }
+        }
+      }
+
+      // Track playback coordinates directly from hardware frames
+      if (video) {
+        video.addEventListener("timeupdate", () => {
+          checkPlaybackState(video.currentTime);
+        });
+      }
+
+      // Backup fail-proof timer sequence execution in case video encounters decoding limits or hangs on network buffering
+      let videoStartTime = Date.now();
+      const backupInterval = setInterval(() => {
+        let elapsedTime = (Date.now() - videoStartTime) / 1000;
+        
+        // If the video actual timeline is frozen, fall back to elapsed countdown metric
+        if (!video || video.paused || video.ended) {
+          checkPlaybackState(elapsedTime);
+        }
+        
+        if (elapsedTime > 14) {
+          clearInterval(backupInterval);
+        }
+      }, 100);
+
+      // Trigger grand final picture show animations
+      function triggerGrandFinale() {
+        console.log("Starting cinematic culmination transition.");
+        
+        // 1. Gently dim the video layer to black screen mask comfort
+        fadeScreen.classList.remove("pointer-events-none");
+        fadeScreen.classList.add("opacity-100");
+
+        // 2. Animate photo frame overlay in 1.4s
+        setTimeout(() => {
+          finaleWrapper.classList.remove("pointer-events-none");
+          finaleWrapper.classList.add("opacity-100", "scale-100");
+
+          // 3. Fade in final romantic words and actions button chronologically
+          setTimeout(() => {
+            finalWords.classList.add("opacity-100");
+            finalWords.classList.remove("translate-y-4");
+          }, 600);
+
+          setTimeout(() => {
+            actionTrigger.classList.add("opacity-100");
+            actionTrigger.classList.remove("translate-y-4");
+          }, 1400);
+
+        }, 1200);
+      }
+
+    });
+  </script>
+
+  <!-- Persistent Dual-Song Playlist Audio Controller -->
+  <script>
+    (function() {
+      const playlist = [
+        "/Something Just Like This.mp3",
+        "/There is a light that never goes out.mp3"
+      ];
+      
+      let currentTrackIndex = parseInt(localStorage.getItem("bg_music_track_index") || "0", 10);
+      if (currentTrackIndex < 0 || currentTrackIndex >= playlist.length) {
+        currentTrackIndex = 0;
+      }
+      
+      let isMuted = localStorage.getItem("bg_music_muted") !== "false"; // default to muted unless explicitly unmuted
+      let audio = null;
+      let saveInterval = null;
+
+      function initAudio() {
+        if (audio) return;
+        
+        currentTrackIndex = parseInt(localStorage.getItem("bg_music_track_index") || "0", 10);
+        if (currentTrackIndex < 0 || currentTrackIndex >= playlist.length) {
+          currentTrackIndex = 0;
+        }
+        const savedTime = parseFloat(localStorage.getItem("bg_music_track_time") || "0");
+
+        audio = new Audio(playlist[currentTrackIndex]);
+        audio.volume = 0.15; // Soft cinematic background volume
+        audio.currentTime = savedTime;
+        
+        audio.addEventListener("ended", () => {
+          nextTrack();
+        });
+
+        saveInterval = setInterval(() => {
+          if (audio && !audio.paused) {
+            localStorage.setItem("bg_music_track_time", audio.currentTime.toString());
+          }
+        }, 1000);
+
+        // Try playing if unmuted
+        if (!isMuted) {
+          const playPromise = audio.play();
+          if (playPromise !== undefined) {
+            playPromise.catch(e => {
+              console.log("Auto-play deferred until user document interaction.", e);
+            });
+          }
+        }
+      }
+
+      function nextTrack() {
+        if (!audio) return;
+        audio.pause();
+        currentTrackIndex = (currentTrackIndex + 1) % playlist.length;
+        localStorage.setItem("bg_music_track_index", currentTrackIndex.toString());
+        localStorage.setItem("bg_music_track_time", "0");
+        audio.src = playlist[currentTrackIndex];
+        audio.currentTime = 0;
+        if (!isMuted) {
+          audio.play().catch(e => console.log("Next track play prevented", e));
+        }
+        updateButtonUI();
+      }
+
+      function toggleMute() {
+        isMuted = !isMuted;
+        localStorage.setItem("bg_music_muted", isMuted ? "true" : "false");
+        
+        if (isMuted) {
+          if (audio) {
+            audio.pause();
+            localStorage.setItem("bg_music_track_time", audio.currentTime.toString());
+          }
+        } else {
+          if (!audio) {
+            initAudio();
+          } else {
+            audio.play().catch(e => console.log("Audio play deferred", e));
+          }
+        }
+        updateButtonUI();
+      }
+
+      function createAudioControls() {
+        const parent = document.createElement("div");
+        parent.id = "global-music-pill";
+        // Fixed positioning in bottom right corner with beautiful design elements
+        parent.className = "fixed bottom-6 right-6 z-[100] flex items-center gap-3 bg-stone-950/85 backdrop-blur border border-white/10 rounded-full px-4 py-2.5 text-white shadow-[0_4px_30px_rgba(227,11,92,0.15)] pointer-events-auto transition-all duration-300 hover:border-raspberry/50 group select-none";
+        
+        const audioWave = document.createElement("div");
+        audioWave.className = "flex items-end gap-[3px] h-3 w-4 shrink-0 mb-0.5";
+        for (let i = 0; i < 4; i++) {
+          const bar = document.createElement("span");
+          bar.className = "w-[2px] bg-raspberry rounded-full origin-bottom transform transition-all duration-300";
+          bar.style.height = "15%";
+          bar.id = `wave-bar-${i}`;
+          audioWave.appendChild(bar);
+        }
+
+        const titleDiv = document.createElement("div");
+        titleDiv.className = "flex flex-col text-left leading-none";
+        
+        const smallLabel = document.createElement("span");
+        smallLabel.className = "font-mono text-[8px] text-stone-500 uppercase tracking-widest";
+        smallLabel.innerText = "Ambient Loop";
+
+        const titleSpan = document.createElement("span");
+        titleSpan.className = "font-sans text-[10px] font-medium text-stone-300 max-w-[150px] truncate select-none transition-colors group-hover:text-stone-100 mt-0.5 h-[12px] leading-tight";
+        titleSpan.id = "music-title-display";
+        
+        // Clean display name of song (unescaping url encodings or names)
+        const rawName = playlist[currentTrackIndex].substring(1).replace(".mp3", "");
+        titleSpan.innerText = rawName;
+
+        titleDiv.appendChild(smallLabel);
+        titleDiv.appendChild(titleSpan);
+
+        const toggleBtn = document.createElement("button");
+        toggleBtn.className = "ml-2 hover:text-raspberry transition-all duration-300 flex items-center justify-center p-1.5 rounded-full bg-stone-900 hover:bg-stone-800 border border-white/5 shadow-inner cursor-pointer animate-none outline-none";
+        toggleBtn.innerHTML = getIconSVG();
+        toggleBtn.addEventListener("click", (e) => {
+          e.stopPropagation();
+          toggleMute();
+        });
+
+        parent.appendChild(audioWave);
+        parent.appendChild(titleDiv);
+        parent.appendChild(toggleBtn);
+        
+        document.body.appendChild(parent);
+
+        // Animate wave lines periodically
+        function animateWave() {
+          const isCurrentlyPlaying = audio && !audio.paused && !isMuted;
+          for (let i = 0; i < 4; i++) {
+            const bar = document.getElementById(`wave-bar-${i}`);
+            if (bar) {
+              if (isCurrentlyPlaying) {
+                const h = Math.floor(Math.random() * 85) + 15;
+                bar.style.height = `${h}%`;
+              } else {
+                bar.style.height = "15%";
+              }
+            }
+          }
+          setTimeout(animateWave, 150);
+        }
+        animateWave();
+        updateButtonUI();
+      }
+
+      function getIconSVG() {
+        if (isMuted) {
+          return `<svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color: #F43F5E"><path d="M11 5 6 9 2 9v6h4l5 4V5z"/><line x1="22" x2="16" y1="9" y2="15"/><line x1="16" x2="22" y1="9" y2="15"/></svg>`;
+        } else {
+          return `<svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color: #F43F5E"><path d="M11 5 6 9 2 9v6h4l5 4V5z"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/></svg>`;
+        }
+      }
+
+      function updateButtonUI() {
+        const titleSpan = document.getElementById("music-title-display");
+        if (titleSpan) {
+          const rawName = playlist[currentTrackIndex].substring(1).replace(".mp3", "");
+          titleSpan.innerText = rawName;
+        }
+        const pill = document.getElementById("global-music-pill");
+        if (pill) {
+          const btn = pill.querySelector("button");
+          if (btn) btn.innerHTML = getIconSVG();
+        }
+      }
+
+      // Automatically play once clicked anywhere (browser click pass policy)
+      document.addEventListener("click", () => {
+        if (!audio) {
+          initAudio();
+        } else if (!isMuted && audio.paused) {
+          audio.play().catch(e => console.log("User interaction audio resume policy active", e));
+        }
+      }, { once: false });
+
+      // Temporarily pause audio when document becomes invisible (tab backgrounded)
+      document.addEventListener("visibilitychange", () => {
+        if (document.hidden) {
+          if (audio && !audio.paused) {
+            audio.pause();
+          }
+        } else {
+          if (audio && !isMuted) {
+            audio.play().catch(e => console.log("Visibility resume play avoided", e));
+          }
+        }
+      });
+
+      // Save play coordinates beforeunload
+      window.addEventListener("beforeunload", () => {
+        if (audio) {
+          localStorage.setItem("bg_music_track_time", audio.currentTime.toString());
+        }
+      });
+
+      // Start
+      initAudio();
+      
+      // Delay UI load slightly to prevent rendering before HTML body parses
+      setTimeout(() => {
+        createAudioControls();
+      }, 300);
+      
+    })();
+  </script>
+</body>
+</html>
